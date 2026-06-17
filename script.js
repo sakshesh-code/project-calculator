@@ -1,26 +1,141 @@
+//Potential bugs
+// - backspace after typing operator doesnt reset num1
+
+
 const display = document.querySelector(".display");
+
+//Number and operators for running calculations
+let num = "";
+let oper = "";
+let num1 = "";
 
 //AC button clears everything
 const clear = document.getElementById("clear");
 clear.addEventListener("click", (e)=> {
-    display.textContent = "0";
+    display.textContent = "";
+    num = "";
+    num1 = "";
+    oper = "";
 });
 
 //Backspace Button clears one number at a time
 const backspace = document.getElementById("backspc");
 backspace.addEventListener("click", (e)=>{
-
+if(num === ""){
+    num = num1;
+    oper = "";
+    display.textContent = display.textContent.slice(0, display.textContent.length - 1) || "0";
+    return;
+}
    display.textContent = display.textContent.slice(0, display.textContent.length - 1) || "0";
+   num = num.slice(0, -1);
 });
 
 //Numbers input corresponding values
 const nums = document.querySelectorAll(".num");
+
 nums.forEach(btn=>{
     btn.addEventListener("click", (e)=>{
-        if(display.textContent === "0"){
+
+        if(num === "" && num1 === ""){
             display.textContent = e.target.textContent;
+
+            num += e.target.textContent;
             return;
         }
         display.textContent += e.target.textContent;
+
+        num += e.target.textContent;
+
     })
 });
+
+//Operators
+const op = document.querySelectorAll(".op");
+
+op.forEach(btn=>{
+    btn.addEventListener("click", e=>{
+
+        if(e.target.textContent === "-" && display.textContent === ""){
+            display.textContent = e.target.textContent;
+            
+            oper = e.target.textContent;
+
+            num = e.target.textContent;
+            
+            return;
+        }
+        //stops operators running first
+        if(display.textContent === ""){
+            return;
+        }
+        const op = "+×-÷%";
+        //Stops consecutive operators on display
+        if(op.includes(display.textContent.slice(-1))){
+            return;
+        }
+       display.textContent += e.target.textContent;
+
+       oper = e.target.textContent;
+       
+       num1 = num;
+       num = "";    
+       
+    })
+});
+
+//result from =
+const equals = document.querySelector(".result");
+equals.addEventListener("click", e=>{
+    if(num1 === ""){
+        return;
+    }
+
+    num1 = Number(num1);
+    num = Number(num);
+
+    oper === "+" ? 
+        display.textContent = operate(add, num1, num): 
+        oper === "-" ? 
+            display.textContent = operate(sub, num1, num): 
+            oper === "×" ?
+                    display.textContent = operate(multi, num1, num) :
+                    oper === "÷" ?
+                        display.textContent = operate(div, num1, num) :
+                        display.textContent = operate(remainder, num1, num);
+
+    num = "";
+    num1 = "";
+    oper = "";
+
+})
+
+
+//Operations functions
+
+function add(a, b){
+    return a + b;
+};
+
+function sub(a, b){
+    return a - b;
+};
+
+function multi(a, b){
+    return a * b;
+};
+
+function div(a, b){
+    return a / b;
+};
+
+function remainder(a, b){
+    return a % b;
+};
+
+//------------------------
+
+//Operate function
+function operate(op, a, b){
+    return op(a, b);
+};

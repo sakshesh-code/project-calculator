@@ -6,8 +6,11 @@ Calculator design with few working buttons responsive to mouse click
 
 ## Update 2.0
 Fully functional calculator for simple calculations.
+- Added keyboard support
 
 ### Bugs Fixed
 - Numbers won't overflow the display
 - Works with decimals
+- Fixed backpace bug
+
 

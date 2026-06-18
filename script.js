@@ -1,5 +1,6 @@
 
-const display = document.querySelector(".display");
+const text = document.querySelector(".text");
+
 
 //Number and operators for running calculations
 let num = "";
@@ -10,7 +11,7 @@ let num1 = "";
 //AC button clears everything
 const clear = document.getElementById("clear");
 clear.addEventListener("click", (e)=> {
-    display.textContent = "";
+    text.textContent = "";
     num = "";
     num1 = "";
     oper = "";
@@ -23,10 +24,10 @@ backspace.addEventListener("click", (e)=>{
 if(num === ""){
     num = num1;
     oper = "";
-    display.textContent = display.textContent.slice(0, display.textContent.length - 1) || "0";
+    text.textContent = text.textContent.slice(0, text.textContent.length - 1) || "0";
     return;
 }
-   display.textContent = display.textContent.slice(0, display.textContent.length - 1) || "0";
+   text.textContent = text.textContent.slice(0, text.textContent.length - 1) || "0";
    num = num.slice(0, -1);
 });
 
@@ -37,13 +38,17 @@ const nums = document.querySelectorAll(".num");
 nums.forEach(btn=>{
     btn.addEventListener("click", (e)=>{
 
+        if(num.length > 10){
+            return;
+        };
+
         if(num === "" && num1 === ""){
-            display.textContent = e.target.textContent;
+            text.textContent = e.target.textContent;
 
             num += e.target.textContent;
             return;
         }
-        display.textContent += e.target.textContent;
+        text.textContent += e.target.textContent;
 
         num += e.target.textContent;
 
@@ -61,15 +66,15 @@ op.forEach(btn=>{
         if(oper !== ""){
             let result = operate(oper, Number(num1), Number(num));
             oper = e.target.textContent;
-            display.textContent = result + oper;
+            text.textContent = result + oper;
             num1 = result;
             num = "";
             return;
         }
 
         //Allows - operator to start 
-        if(e.target.textContent === "-" && display.textContent === ""){
-            display.textContent = e.target.textContent;
+        if(e.target.textContent === "-" && text.textContent === ""){
+            text.textContent = e.target.textContent;
             
             oper = e.target.textContent;
 
@@ -79,18 +84,18 @@ op.forEach(btn=>{
         };
 
         //stops operators running first
-        if(display.textContent === ""){
+        if(text.textContent === ""){
             return;
         };
 
         const op = "+×-÷%";
 
-        //Stops consecutive operators on display
-        if(op.includes(display.textContent.slice(-1))){
+        //Stops consecutive operators on text
+        if(op.includes(text.textContent.slice(-1))){
             return;
         };
 
-       display.textContent += e.target.textContent;
+       text.textContent = e.target.textContent;
 
        oper = e.target.textContent;
        
@@ -111,7 +116,7 @@ equals.addEventListener("click", e=>{
     num1 = Number(num1);
     num = Number(num);
 
-   display.textContent = operate(oper, num1, num);
+   text.textContent = operate(oper, num1, num);
     num = "";
     num1 = "";
     oper = "";
@@ -124,13 +129,13 @@ const dot = document.querySelector(".period");
 dot.addEventListener("click", e=>{
     if(num.includes(".")){
         return;
-    }else if(display.textContent === ""){
-        display.textContent = "0.";
+    }else if(text.textContent === ""){
+        text.textContent = "0.";
         num = "0.";
         return;
     }
 
-    display.textContent += e.target.textContent;
+    text.textContent += e.target.textContent;
     num += e.target.textContent;
 })
 
@@ -169,7 +174,20 @@ function operate(op, a, b){
                     op = multi :
                     op === "÷" ?
                         op = div :
+  
                         op = remainder;
-    return op(a, b);
+//Filter Infinity
+if(b === 0 && op === div){
+    return "Error: Infinite";
+};                 
+
+    const result = op(a, b);
+
+    if(String(result).length > 10 && Number.isInteger(result)){
+        return result.toExponential(6);
+    }
+
+    return (String(result).length) > 10 && String(result).includes(".") ? 
+        result.toFixed(10) : result;
 };
 

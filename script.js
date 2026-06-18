@@ -192,6 +192,8 @@ if(b === 0 && op === div){
         result.toFixed(10) : result;
 };
 
+
+
 //Trying out keyboard events
 const numKey = "1234567890";
 const opKey = "+-/%*";

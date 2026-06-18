@@ -63,10 +63,10 @@ op.forEach(btn=>{
     btn.addEventListener("click", e=>{
 
         //Runs calculation if operator is already present
-        if(oper !== ""){
+        if(oper !== "" && num1 === ""){
             let result = operate(oper, Number(num1), Number(num));
             oper = e.target.textContent;
-            text.textContent = result + oper;
+            text.textContent = e.target.textContent;
             num1 = result;
             num = "";
             return;
@@ -137,7 +137,7 @@ dot.addEventListener("click", e=>{
 
     text.textContent += e.target.textContent;
     num += e.target.textContent;
-})
+});
 
 
 //Operations functions

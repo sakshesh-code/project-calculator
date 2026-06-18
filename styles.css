@@ -65,6 +65,7 @@ body{
   font-size: 25px;
   box-shadow: 1px 1px 5px white;
   text-shadow: 0px 0px 3px white;
+  transition: 0.2s;
 }
 
 .btn.right{
@@ -83,8 +84,7 @@ body{
 }
 
 .btn:active{
-   width: 78px;
-   margin: 0px 1px 0px 1px;
-   transition: 0.2s;
+   transform: scale(0.95);
+   transition: none;
 }
 

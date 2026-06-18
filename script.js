@@ -24,10 +24,11 @@ backspace.addEventListener("click", (e)=>{
 if(num === ""){
     num = num1;
     oper = "";
-    text.textContent = text.textContent.slice(0, text.textContent.length - 1) || "0";
+    num1 = "";
+    text.textContent = text.textContent.slice(0, text.textContent.length - 1) || num;
     return;
 }
-   text.textContent = text.textContent.slice(0, text.textContent.length - 1) || "0";
+   text.textContent = text.textContent.slice(0, text.textContent.length - 1) || num;
    num = num.slice(0, -1);
 });
 
@@ -70,7 +71,7 @@ op.forEach(btn=>{
             num1 = result;
             num = "";
             return;
-        }
+        };
 
         //Allows - operator to start 
         if(e.target.textContent === "-" && text.textContent === ""){
@@ -102,7 +103,7 @@ op.forEach(btn=>{
        num1 = num;
        num = "";    
        
-    })
+    });
 });
 
 
@@ -170,7 +171,7 @@ function operate(op, a, b){
         op = add: 
         op === "-" ? 
             op = sub: 
-            op === "×" ?
+            (op === "×") ?
                     op = multi :
                     op === "÷" ?
                         op = div :
@@ -190,4 +191,133 @@ if(b === 0 && op === div){
     return (String(result).length) > 10 && String(result).includes(".") ? 
         result.toFixed(10) : result;
 };
+
+//Trying out keyboard events
+const numKey = "1234567890";
+const opKey = "+-/%*";
+
+
+document.addEventListener("keypress", e=>{
+
+    //For Numbers
+    if(numKey.includes(e.key)){
+
+         if(num.length > 10){
+            return;
+        };
+
+        if(num === "" && num1 === ""){
+            text.textContent = e.key;
+
+            num += e.key;
+            return;
+        };
+
+        text.textContent += e.key;
+
+        num += e.key;
+
+
+
+    //For operators
+    }else if(opKey.includes(e.key)){
+        let key = e.key;
+        if(key === "/"){
+            key = "÷";
+        }else if(key === "*"){
+            key = "×";
+        };
+
+        //Runs calculation if operator is already present
+        if(oper !== "" && num1 === ""){
+            let result = operate(oper, Number(num1), Number(num));
+            oper = key;
+            text.textContent = key;
+            num1 = result;
+            num = "";
+            return;
+        };
+        
+        //Allows - operator to start 
+        if(e.key === "-" && text.textContent === ""){
+            text.textContent = key;
+            
+            oper = key;
+
+            num = key;
+            
+            return;
+        };
+
+        //stops operators running first
+        if(text.textContent === ""){
+            return;
+        };
+
+        const op = "+×-÷%";
+
+        //Stops consecutive operators on text
+        if(op.includes(text.textContent.slice(-1))){
+            return;
+        };
+
+        text.textContent = key;
+
+       oper = key;
+       
+       num1 = num;
+       num = "";    
+
+
+
+       //Enter 
+    }else if(e.key === "Enter"){
+        if(num1 === ""){
+        return;
+    }
+
+    num1 = Number(num1);
+    num = Number(num);
+
+   text.textContent = operate(oper, num1, num);
+    num = "";
+    num1 = "";
+    oper = "";
+
+
+
+    //Period
+    }else if(e.key === "."){
+        if(num.includes(".")){
+        return;
+
+        }else if(text.textContent === ""){
+        text.textContent = "0.";
+        num = "0.";
+        return;
+    }
+
+    text.textContent += e.key;
+    num += e.key;
+    }
+
+});
+
+//Backspace
+document.addEventListener("keydown", e=>{
+    
+    if(e.key === "Backspace"){
+        if(num === ""){
+    num = num1;
+    oper = "";
+    num1 = "";
+    text.textContent = text.textContent.slice(0, text.textContent.length - 1) || num;
+    return;
+}
+   text.textContent = text.textContent.slice(0, text.textContent.length - 1) || num;
+   num = num.slice(0, -1);
+    };
+
+});
+
 

@@ -1,6 +1,3 @@
-//Potential bugs
-// - backspace after typing operator doesnt reset num1
-
 
 const display = document.querySelector(".display");
 
@@ -8,6 +5,7 @@ const display = document.querySelector(".display");
 let num = "";
 let oper = "";
 let num1 = "";
+
 
 //AC button clears everything
 const clear = document.getElementById("clear");
@@ -17,6 +15,7 @@ clear.addEventListener("click", (e)=> {
     num1 = "";
     oper = "";
 });
+
 
 //Backspace Button clears one number at a time
 const backspace = document.getElementById("backspc");
@@ -30,6 +29,7 @@ if(num === ""){
    display.textContent = display.textContent.slice(0, display.textContent.length - 1) || "0";
    num = num.slice(0, -1);
 });
+
 
 //Numbers input corresponding values
 const nums = document.querySelectorAll(".num");
@@ -50,12 +50,24 @@ nums.forEach(btn=>{
     })
 });
 
+
 //Operators
 const op = document.querySelectorAll(".op");
 
 op.forEach(btn=>{
     btn.addEventListener("click", e=>{
 
+        //Runs calculation if operator is already present
+        if(oper !== ""){
+            let result = operate(oper, Number(num1), Number(num));
+            oper = e.target.textContent;
+            display.textContent = result + oper;
+            num1 = result;
+            num = "";
+            return;
+        }
+
+        //Allows - operator to start 
         if(e.target.textContent === "-" && display.textContent === ""){
             display.textContent = e.target.textContent;
             
@@ -64,16 +76,20 @@ op.forEach(btn=>{
             num = e.target.textContent;
             
             return;
-        }
+        };
+
         //stops operators running first
         if(display.textContent === ""){
             return;
-        }
+        };
+
         const op = "+×-÷%";
+
         //Stops consecutive operators on display
         if(op.includes(display.textContent.slice(-1))){
             return;
-        }
+        };
+
        display.textContent += e.target.textContent;
 
        oper = e.target.textContent;
@@ -83,6 +99,7 @@ op.forEach(btn=>{
        
     })
 });
+
 
 //result from =
 const equals = document.querySelector(".result");
@@ -94,20 +111,27 @@ equals.addEventListener("click", e=>{
     num1 = Number(num1);
     num = Number(num);
 
-    oper === "+" ? 
-        display.textContent = operate(add, num1, num): 
-        oper === "-" ? 
-            display.textContent = operate(sub, num1, num): 
-            oper === "×" ?
-                    display.textContent = operate(multi, num1, num) :
-                    oper === "÷" ?
-                        display.textContent = operate(div, num1, num) :
-                        display.textContent = operate(remainder, num1, num);
-
+   display.textContent = operate(oper, num1, num);
     num = "";
     num1 = "";
     oper = "";
 
+});
+
+
+//period .
+const dot = document.querySelector(".period");
+dot.addEventListener("click", e=>{
+    if(num.includes(".")){
+        return;
+    }else if(display.textContent === ""){
+        display.textContent = "0.";
+        num = "0.";
+        return;
+    }
+
+    display.textContent += e.target.textContent;
+    num += e.target.textContent;
 })
 
 
@@ -135,7 +159,17 @@ function remainder(a, b){
 
 //------------------------
 
-//Operate function
+//Operate calculation function
 function operate(op, a, b){
+    op === "+" ? 
+        op = add: 
+        op === "-" ? 
+            op = sub: 
+            op === "×" ?
+                    op = multi :
+                    op === "÷" ?
+                        op = div :
+                        op = remainder;
     return op(a, b);
 };
+

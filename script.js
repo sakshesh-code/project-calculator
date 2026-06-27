@@ -116,7 +116,7 @@ equals.addEventListener("click", e=>{
     num = Number(num);
 
    text.textContent = operate(oper, num1, num);
-    num = "";
+    num = text.textContent;
     num1 = "";
     oper = "";
 
@@ -278,7 +278,7 @@ document.addEventListener("keypress", e=>{
     num = Number(num);
 
    text.textContent = operate(oper, num1, num);
-    num = "";
+    num = text.textContent;
     num1 = "";
     oper = "";
 

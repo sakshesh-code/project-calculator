@@ -76,8 +76,6 @@ op.forEach(btn=>{
         //Allows - operator to start 
         if(e.target.textContent === "-" && text.textContent === ""){
             text.textContent = e.target.textContent;
-            
-            oper = e.target.textContent;
 
             num = e.target.textContent;
             
@@ -243,8 +241,6 @@ document.addEventListener("keypress", e=>{
         //Allows - operator to start 
         if(e.key === "-" && text.textContent === ""){
             text.textContent = key;
-            
-            oper = key;
 
             num = key;
             
